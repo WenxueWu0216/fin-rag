@@ -2,3 +2,5 @@ pandas
 rank-bm25
 numpy
 sentence-transformers
+anthropic
+python-dotenv
