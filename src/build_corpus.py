@@ -15,5 +15,6 @@ with open("data/chunks.jsonl", "w") as f:
     for i, row in df.iterrows():
         for j, c in enumerate(chunk_text(row["text"])):
             rec = {"chunk_id": f"{i}_{j}", "ticker": row["ticker"],
-                   "date": row["date"], "title": row["title"], "text": c}
+                   "date": row["date"], "title": row["title"], "text": c,
+                   "index_text": f"[{str(row['date'])[:10]} | {row['ticker']}] {row['title']}\n{c}"}
             f.write(json.dumps(rec) + "\n")

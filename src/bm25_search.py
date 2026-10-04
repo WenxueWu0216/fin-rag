@@ -5,7 +5,7 @@ import re
 chunks = [json.loads(l) for l in open("data/chunks.jsonl")]
 def tokenize(text):
     return re.findall(r"[a-z0-9]+", text.lower())
-tokenized = [tokenize(c["text"]) for c in chunks]
+tokenized = [tokenize(c["index_text"]) for c in chunks]
 bm25 = BM25Okapi(tokenized)
 
 def search(query, k=5):

@@ -19,13 +19,14 @@ def build_context(results):
         blocks.append(f"[{c['chunk_id']}] ({c['date']}, {c['ticker']}) {c['title']}\n{c['text']}")
     return "\n\n".join(blocks)
 
-def answer(question, k=5):
+def answer(question, k=10):
     results = search(question, k=k)
     context = build_context(results)
     msg = client.messages.create(
         model=MODEL,
         max_tokens=500,
         system=SYSTEM,
+        extra_body={"temperature": 0},
         messages=[{"role": "user", "content": f"News excerpts:\n\n{context}\n\nQuestion: {question}"}],
     )
     text = msg.content[0].text
@@ -36,6 +37,7 @@ def answer(question, k=5):
         "citations": sorted(cited),
         "invalid_citations": sorted(cited - retrieved),
         "sources": [r[0] for r in results],
+        "context": context,
     }
 
 if __name__ == "__main__":
