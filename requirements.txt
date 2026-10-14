@@ -4,3 +4,7 @@ numpy
 sentence-transformers
 anthropic
 python-dotenv
+fastapi
+uvicorn
+fastapi
+uvicorn
