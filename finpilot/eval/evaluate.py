@@ -1,17 +1,19 @@
 import json, sys, time
 
+from finpilot.config import EVAL_DIR
+
 mode = sys.argv[1] if len(sys.argv) > 1 else "bm25"
 if mode == "dense":
-    from dense_search import search
+    from finpilot.retrieval.dense import search
 elif mode == "hybrid":
-    from hybrid_search import search
+    from finpilot.retrieval.hybrid import search
 elif mode == "rerank":
-    from rerank_search import search
+    from finpilot.retrieval.rerank import search
 else:
-    from bm25_search import search
+    from finpilot.retrieval.bm25 import search
 print("mode:", mode)
 K = 5
-queries = [json.loads(l) for l in open("eval/queries.jsonl")]
+queries = [json.loads(l) for l in open(EVAL_DIR / "queries.jsonl")]
 
 hits, rr_sum = 0, 0.0
 t0 = time.perf_counter()

@@ -1,5 +1,7 @@
 import json
-from rag import answer, client, MODEL
+
+from finpilot.config import EVAL_DIR, LLM_MODEL
+from finpilot.generation.rag import answer, client
 
 JUDGE = """You are checking a RAG answer for faithfulness.
 
@@ -14,7 +16,7 @@ Reply with exactly one word: SUPPORTED or UNSUPPORTED."""
 
 REFUSAL = "enough information"
 
-rows = [json.loads(l) for l in open("eval/rag_questions.jsonl")]
+rows = [json.loads(l) for l in open(EVAL_DIR / "rag_questions.jsonl")]
 s = {"ans": 0, "unans": 0, "invalid": 0, "cited": 0, "gold": 0,
      "false_refusal": 0, "correct_refusal": 0, "faithful": 0}
 
@@ -39,7 +41,7 @@ for r in rows:
     s["cited"] += bool(out["citations"])
     s["gold"] += r["gold"] in out["citations"]
     verdict = client.messages.create(
-        model=MODEL,
+        model=LLM_MODEL,
         max_tokens=5,
         extra_body={"temperature": 0},
         messages=[{"role": "user", "content": JUDGE.format(context=out["context"], answer=out["answer"])}],

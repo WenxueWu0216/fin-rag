@@ -4,14 +4,14 @@ import anthropic
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
 
-import bm25_search, dense_search, hybrid_search, rerank_search
-from rag import answer
+from finpilot.generation.rag import answer
+from finpilot.retrieval import bm25, dense, hybrid, rerank
 
 METHODS = {
-    "bm25": bm25_search.search,
-    "dense": dense_search.search,
-    "hybrid": hybrid_search.search,
-    "rerank": rerank_search.search,
+    "bm25": bm25.search,
+    "dense": dense.search,
+    "hybrid": hybrid.search,
+    "rerank": rerank.search,
 }
 
 app = FastAPI(title="fin-rag", version="0.1.0")

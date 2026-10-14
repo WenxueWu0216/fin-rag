@@ -1,10 +1,9 @@
 import re, sys
 import anthropic
-from dotenv import load_dotenv
-load_dotenv(override=True)
-from rerank_search import search, id2chunk
 
-MODEL = "claude-haiku-4-5-20251001"
+from finpilot.config import LLM_MODEL
+from finpilot.retrieval.rerank import search, id2chunk
+
 client = anthropic.Anthropic()
 
 SYSTEM = """You are a financial news analyst. Answer the question using ONLY the provided news excerpts.
@@ -23,7 +22,7 @@ def answer(question, k=10):
     results = search(question, k=k)
     context = build_context(results)
     msg = client.messages.create(
-        model=MODEL,
+        model=LLM_MODEL,
         max_tokens=500,
         system=SYSTEM,
         extra_body={"temperature": 0},

@@ -1,7 +1,9 @@
 import json, random
 
+from finpilot.config import CHUNKS_PATH, EVAL_DIR
+
 random.seed(42)
-chunks = [json.loads(l) for l in open("data/chunks.jsonl")]
+chunks = [json.loads(l) for l in open(CHUNKS_PATH)]
 
 title_to_ids = {}
 for c in chunks:
@@ -10,7 +12,7 @@ for c in chunks:
 titles = sorted(title_to_ids)
 sample = random.sample(titles, min(200, len(titles)))
 
-with open("eval/queries.jsonl", "w") as f:
+with open(EVAL_DIR / "queries.jsonl", "w") as f:
     for t in sample:
         f.write(json.dumps({"query": t, "relevant": title_to_ids[t]}) + "\n")
 

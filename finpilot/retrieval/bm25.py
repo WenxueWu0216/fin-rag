@@ -2,7 +2,9 @@ import json
 from rank_bm25 import BM25Okapi
 import re
 
-chunks = [json.loads(l) for l in open("data/chunks.jsonl")]
+from finpilot.config import CHUNKS_PATH
+
+chunks = [json.loads(l) for l in open(CHUNKS_PATH)]
 def tokenize(text):
     return re.findall(r"[a-z0-9]+", text.lower())
 tokenized = [tokenize(c["index_text"]) for c in chunks]

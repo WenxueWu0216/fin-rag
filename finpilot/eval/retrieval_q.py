@@ -1,14 +1,16 @@
 import json
-import bm25_search, dense_search, hybrid_search, rerank_search
+
+from finpilot.config import EVAL_DIR
+from finpilot.retrieval import bm25, dense, hybrid, rerank
 
 METHODS = {
-    "bm25": bm25_search.search,
-    "dense": dense_search.search,
-    "hybrid": hybrid_search.search,
-    "rerank": rerank_search.search,
+    "bm25": bm25.search,
+    "dense": dense.search,
+    "hybrid": hybrid.search,
+    "rerank": rerank.search,
 }
 
-rows = [json.loads(l) for l in open("eval/rag_questions.jsonl")]
+rows = [json.loads(l) for l in open(EVAL_DIR / "rag_questions.jsonl")]
 rows = [r for r in rows if r["answerable"]]
 
 for name, search in METHODS.items():

@@ -1,13 +1,14 @@
 from sentence_transformers import CrossEncoder
-import hybrid_search
-from bm25_search import chunks
 
-RERANKER = "cross-encoder/ms-marco-MiniLM-L-6-v2"
-reranker = CrossEncoder(RERANKER)
+from finpilot.config import RERANK_MODEL
+from finpilot.retrieval import hybrid
+from finpilot.retrieval.bm25 import chunks
+
+reranker = CrossEncoder(RERANK_MODEL)
 id2chunk = {c["chunk_id"]: c for c in chunks}
 
 def search(query, k=5, candidates=30):
-    cands = hybrid_search.search(query, k=candidates)
+    cands = hybrid.search(query, k=candidates)
     texts = [id2chunk[r[0]]["index_text"] for r in cands]
     scores = reranker.predict([(query, t) for t in texts])
     order = scores.argsort()[::-1][:k]

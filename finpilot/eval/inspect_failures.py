@@ -1,7 +1,9 @@
 import json
-from bm25_search import search, chunks
 
-queries = [json.loads(l) for l in open("eval/queries.jsonl")]
+from finpilot.config import EVAL_DIR
+from finpilot.retrieval.bm25 import search, chunks
+
+queries = [json.loads(l) for l in open(EVAL_DIR / "queries.jsonl")]
 id2chunk = {c["chunk_id"]: c for c in chunks}
 
 shown = 0

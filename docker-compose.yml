@@ -1,0 +1,25 @@
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: finpilot-db
+    environment:
+      # Local development credentials only
+      POSTGRES_USER: finpilot
+      POSTGRES_PASSWORD: finpilot
+      POSTGRES_DB: finpilot
+    ports:
+      # Host port 5433 avoids clashing with a local Postgres on 5432
+      - "5433:5432"
+    volumes:
+      # Persist data across container restarts
+      - pgdata:/var/lib/postgresql/data
+      # Runs only on first startup, when the data directory is empty
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finpilot -d finpilot"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

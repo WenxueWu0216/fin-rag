@@ -2,12 +2,13 @@ import json
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-MODEL = "BAAI/bge-small-en-v1.5"
+from finpilot.config import CHUNKS_PATH, EMB_PATH, EMBED_MODEL
+
 QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 
-chunks = [json.loads(l) for l in open("data/chunks.jsonl")]
-emb = np.load("data/embeddings.npy")
-model = SentenceTransformer(MODEL)
+chunks = [json.loads(l) for l in open(CHUNKS_PATH)]
+emb = np.load(EMB_PATH)
+model = SentenceTransformer(EMBED_MODEL)
 
 def search(query, k=5):
     q = model.encode(QUERY_PREFIX + query, normalize_embeddings=True)

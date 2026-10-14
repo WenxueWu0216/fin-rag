@@ -1,13 +1,12 @@
 import json, random
 import anthropic
-from dotenv import load_dotenv
-load_dotenv(override=True)
 
-MODEL = "claude-haiku-4-5-20251001"
+from finpilot.config import CHUNKS_PATH, EVAL_DIR, LLM_MODEL
+
 client = anthropic.Anthropic()
 random.seed(7)
 
-chunks = [json.loads(l) for l in open("data/chunks.jsonl")]
+chunks = [json.loads(l) for l in open(CHUNKS_PATH)]
 sample = random.sample(chunks, 20)
 
 PROMPT = """Write ONE specific factual question that can be answered using only the news excerpt below.
@@ -26,10 +25,10 @@ UNANSWERABLE = [
     "Who became CEO of Starbucks in 2024?",
 ]
 
-with open("eval/rag_questions.jsonl", "w") as f:
+with open(EVAL_DIR / "rag_questions.jsonl", "w") as f:
     for c in sample:
         msg = client.messages.create(
-            model=MODEL,
+            model=LLM_MODEL,
             max_tokens=100,
             messages=[{"role": "user", "content": PROMPT.format(date=c["date"], title=c["title"], text=c["text"])}],
         )
