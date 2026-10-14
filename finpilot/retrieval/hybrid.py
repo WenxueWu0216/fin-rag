@@ -1,10 +1,10 @@
-from finpilot.retrieval import bm25, dense
+from finpilot.retrieval import bm25, dense_pg
 
 RRF_K = 60
 
 def search(query, k=5, pool=50):
     bm = bm25.search(query, k=pool)
-    de = dense.search(query, k=pool)
+    de = dense_pg.search(query, k=pool)
     fused, info = {}, {}
     for results in (bm, de):
         for rank, r in enumerate(results, start=1):

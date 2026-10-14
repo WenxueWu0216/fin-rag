@@ -3,6 +3,8 @@
 Same interface as retrieval.dense: search(query, k) -> [(chunk_id, score, ticker, title)].
 """
 
+import os
+
 import psycopg
 from pgvector.psycopg import register_vector
 from sentence_transformers import SentenceTransformer
@@ -13,7 +15,8 @@ QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 
 # HNSW returns at most ef_search rows, so it must be >= the largest k we ask for
 # (hybrid search requests a pool of 50). Higher values trade speed for recall.
-EF_SEARCH = 100
+# Override with the HNSW_EF_SEARCH env var to experiment.
+EF_SEARCH = int(os.getenv("HNSW_EF_SEARCH", "100"))
 
 model = SentenceTransformer(EMBED_MODEL)
 
