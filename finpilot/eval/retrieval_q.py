@@ -1,13 +1,14 @@
 import json
 
 from finpilot.config import EVAL_DIR
-from finpilot.retrieval import bm25, dense, hybrid, rerank
+from finpilot.retrieval import bm25, dense, hybrid, rerank,dense_pg
 
 METHODS = {
     "bm25": bm25.search,
     "dense": dense.search,
     "hybrid": hybrid.search,
     "rerank": rerank.search,
+    "dense_pg": dense_pg.search,
 }
 
 rows = [json.loads(l) for l in open(EVAL_DIR / "rag_questions.jsonl")]

@@ -8,3 +8,5 @@ fastapi
 uvicorn
 fastapi
 uvicorn
+psycopg[binary]
+pgvector
